@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 27 23:17:28 2025
-
-@author: shrib
-"""
-
 """
 A utility for plotting mathematical functions using Matplotlib.
 
@@ -96,7 +89,7 @@ def plot_function(func, x_min, x_max, title=None, xlabel=None, ylabel=None):
 if __name__ == '__main__':
   # Example usage:
   def my_func(x):
-    return x # A simple quadratic function
+    return x**2 # A simple quadratic function
 
   # Plot my_func from -5 to 5 with custom title and labels
   plot_function(my_func, -5, 5, title="Square Function", xlabel="Input Value", ylabel="Output Value (Squared)")
@@ -106,6 +99,6 @@ if __name__ == '__main__':
     if x == 0:
       raise ValueError("Division by zero!")
     return 1/x
-  
+
   # This will print a warning for x=0 and plot the rest
   plot_function(problematic_func, -2, 2, title="Inverse Function with Error", xlabel="x", ylabel="1/x")

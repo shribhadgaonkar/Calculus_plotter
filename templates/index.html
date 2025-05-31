@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Plotter</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { color: #333; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background-color: #0056b3; }
+        .error { color: red; background-color: #ffe0e0; border: 1px solid red; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+        .plot-container { margin-top: 30px; text-align: center; }
+        .plot-container img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; }
+        code { background-color: #eee; padding: 2px 4px; border-radius: 3px;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plot a Mathematical Function</h1>
+
+        {% if error %}
+            <div class="error">Error: {{ error }}</div>
+        {% endif %}
+
+        <form action="/plot" method="POST">
+            <div class="form-group">
+                <label for="function_string">Function f(x):</label>
+                <input type="text" id="function_string" name="function_string" placeholder="e.g., x**2 or sin(x)" value="{{ form_data.function_string if form_data else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="x_min">x_min:</label>
+                <input type="number" id="x_min" name="x_min" step="any" value="{{ form_data.x_min if form_data else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="x_max">x_max:</label>
+                <input type="number" id="x_max" name="x_max" step="any" value="{{ form_data.x_max if form_data else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Plot Title (Optional):</label>
+                <input type="text" id="title" name="title" value="{{ form_data.title if form_data else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="xlabel">X-axis Label (Optional):</label>
+                <input type="text" id="xlabel" name="xlabel" value="{{ form_data.xlabel if form_data else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="ylabel">Y-axis Label (Optional):</label>
+                <input type="text" id="ylabel" name="ylabel" value="{{ form_data.ylabel if form_data else '' }}">
+            </div>
+
+            <div>
+                <button type="submit">Plot Function</button>
+            </div>
+        </form>
+
+        {% if img_base64 %}
+            <div class="plot-container">
+                {% if plot_title %}
+                    <h2>{{ plot_title }}</h2>
+                {% endif %}
+                {% if function_string_rendered %}
+                    <h3>Function: <code>{{ function_string_rendered }}</code></h3>
+                {% endif %}
+                <img src="data:image/png;base64,{{ img_base64 }}" alt="Generated Plot">
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
